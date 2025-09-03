@@ -19,7 +19,7 @@ apply plugin: 'io.github.fourlastor.construo'
 import io.github.fourlastor.construo.Target
 
 sourceSets.main.resources.srcDirs += [ rootProject.file('assets').path ]
-mainClassName = 'io.scrasms.shmup0.lwjgl3.Lwjgl3Launcher'
+mainClassName = 'com.badlogic.drop.lwjgl3.Lwjgl3Launcher'
 application.setMainClass(mainClassName)
 eclipse.project.name = appName + '-lwjgl3'
 java.sourceCompatibility = 17
@@ -62,8 +62,9 @@ jar {
     exclude('META-INF/INDEX.LIST', 'META-INF/maven/**')
   }
 // setting the manifest makes the JAR runnable.
+// enabling native access helps avoid a warning when Java 24 or later runs the JAR.
   manifest {
-    attributes 'Main-Class': project.mainClassName
+    attributes 'Main-Class': project.mainClassName, 'Enable-Native-Access': 'ALL-UNNAMED'
   }
 // this last step may help on some OSes that need extra instruction to make runnable JARs.
   doLast {
@@ -131,7 +132,7 @@ construo {
         architecture.set(Target.Architecture.AARCH64)
         jdkUrl.set("https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.15%2B6/OpenJDK17U-jdk_aarch64_mac_hotspot_17.0.15_6.tar.gz")
         // macOS needs an identifier
-        identifier.set("io.scrasms.shmup0." + appName)
+        identifier.set("com.badlogic.drop." + appName)
         // Optional: icon for macOS, as an ICNS file
         macIcon.set(project.file("icons/logo.icns"))
       }
@@ -139,7 +140,7 @@ construo {
         architecture.set(Target.Architecture.X86_64)
         jdkUrl.set("https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.15%2B6/OpenJDK17U-jdk_x64_mac_hotspot_17.0.15_6.tar.gz")
         // macOS needs an identifier
-        identifier.set("io.scrasms.shmup0." + appName)
+        identifier.set("com.badlogic.drop." + appName)
         // Optional: icon for macOS, as an ICNS file
         macIcon.set(project.file("icons/logo.icns"))
       }
