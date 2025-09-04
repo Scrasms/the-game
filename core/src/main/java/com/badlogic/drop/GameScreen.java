@@ -1,8 +1,8 @@
 package com.badlogic.drop;
 
-import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
@@ -15,18 +15,15 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
-/** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
-public class Main implements ApplicationListener {
+public class GameScreen implements Screen {
+    private final Drop game;
+
     // Game resources
     private Texture backgroundTexture;
     private Texture bucketTexture;
     private Texture dropTexture;
     private Sound dropSound;
     private Music music;
-
-    // Rendering
-    private SpriteBatch spriteBatch;
-    private FitViewport viewport;
 
     // Sprites
     private Sprite bucketSprite;
@@ -42,9 +39,12 @@ public class Main implements ApplicationListener {
     private Rectangle bucketRect;
     private Rectangle dropRect;
 
-    // Loads assets into memory after libGDX has started
-    @Override
-    public void create() {
+    private int dropsGathered;
+
+    // Constructor stores the Game instance and loads assets into memory
+    public GameScreen(Drop game) {
+        this.game = game;
+
         // Textures are images kept in VRAM
         backgroundTexture = new Texture("background.png");
         bucketTexture = new Texture("bucket.png");
@@ -55,16 +55,8 @@ public class Main implements ApplicationListener {
 
         // Music is audio too large to be fully loaded in RAM so it's streamed from the file as chunks
         music = Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
-
-        // The process of drawing an individual texture is called a draw call
-        // To prevent poor FPS, it is more efficient to send all your draw calls at once to the GPU
-        // SpriteBatch is how libGDX batches (combines) these draw calls together
-        spriteBatch = new SpriteBatch();
-
-        // Viewport controls the size of the application window.
-        // Fitviewport ensures the entire game is always visible no matter the size of the window (basically no overflow).
-        // Each viewport has an associated Camera which controls what part of the game is visible and its zoom level.
-        viewport = new FitViewport(8, 5);
+        music.setLooping(true);
+        music.setVolume(0.5f);
 
         // Sprites track the position of a texture
         bucketSprite = new Sprite(bucketTexture);
@@ -79,11 +71,6 @@ public class Main implements ApplicationListener {
         // Hitboxes
         bucketRect = new Rectangle();
         dropRect = new Rectangle();
-
-        // Keep playing music
-        music.setLooping(true);
-        music.setVolume(0.5f);
-        music.play();
     }
 
     @Override
@@ -93,11 +80,11 @@ public class Main implements ApplicationListener {
         if(width <= 0 || height <= 0) return;
 
         // Resize your application here. The parameters represent the new window size.
-        viewport.update(width, height, true);
+        game.viewport.update(width, height, true);
     }
 
     @Override
-    public void render() {
+    public void render(float delta) {
         // Draw your application here.
         input();
         logic();
@@ -122,14 +109,14 @@ public class Main implements ApplicationListener {
         if (Gdx.input.isTouched()) {
             // getX() and getY() are in window coordinates which has (0,0) at top left. Viewport coords start at bottom left.
             touchPos.set(Gdx.input.getX(), Gdx.input.getY()); // Get and store where touch occured on screen
-            viewport.unproject(touchPos); // Convert touch coordinates to world/viewport coordinates
+            game.viewport.unproject(touchPos); // Convert touch coordinates to world/viewport coordinates
             bucketSprite.setCenterX(touchPos.x); // Move bucket to where user touched screen
         }
     }
 
     // Random game logic method
     private void logic() {
-        float worldWidth = viewport.getWorldWidth();
+        float worldWidth = game.viewport.getWorldWidth();
         float bucketHeight = bucketSprite.getWidth();
         float bucketWidth = bucketSprite.getWidth();
         float delta = Gdx.graphics.getDeltaTime();
@@ -160,6 +147,7 @@ public class Main implements ApplicationListener {
             } else if (bucketRect.overlaps(dropRect)) {
                 dropSprites.removeIndex(i);
                 dropSound.play();
+                dropsGathered++;
             }
         }
 
@@ -176,34 +164,37 @@ public class Main implements ApplicationListener {
     private void draw() {
         // Good practice to clear the screen every time to prevent weird graphical errors
         ScreenUtils.clear(com.badlogic.gdx.graphics.Color.BLACK);
-        viewport.apply();
+        game.viewport.apply();
         // Viewport is applied to the SpriteBatch, ensuring images are drawn in the correct places
-        spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
+        game.batch.setProjectionMatrix(game.viewport.getCamera().combined);
 
         // Batch all draw calls within begin and end method calls
-        spriteBatch.begin();
+        game.batch.begin();
 
-        float worldWidth = viewport.getWorldWidth();
-        float worldHeight = viewport.getWorldHeight();
+        float worldWidth = game.viewport.getWorldWidth();
+        float worldHeight = game.viewport.getWorldHeight();
 
         // Draw order MATTERS
         // Draw backmost textures FIRST
-        spriteBatch.draw(backgroundTexture, 0, 0, worldWidth, worldHeight); // Viewport coords are Q1 of Cartesian plane
-        bucketSprite.draw(spriteBatch); // Sprites have their own draw method
+        game.batch.draw(backgroundTexture, 0, 0, worldWidth, worldHeight); // Viewport coords are Q1 of Cartesian plane
+        bucketSprite.draw(game.batch); // Sprites have their own draw method
+
+        game.font.draw(game.batch, "Drops gathered: " + dropsGathered, 0, worldHeight);
 
         for (Sprite dropSprite : dropSprites) {
-            dropSprite.draw(spriteBatch);
+            dropSprite.draw(game.batch);
         }
 
-        spriteBatch.end();
+
+        game.batch.end();
     }
 
     // Create new dropSprite and add to dropSprites
     private void createDroplet() {
         float dropWidth = 1;
         float dropHeight = 1;
-        float worldWidth = viewport.getWorldWidth();
-        float worldHeight = viewport.getWorldHeight();
+        float worldWidth = game.viewport.getWorldWidth();
+        float worldHeight = game.viewport.getWorldHeight();
 
         Sprite dropSprite = new Sprite(dropTexture);
         dropSprite.setSize(dropWidth, dropHeight);
@@ -226,5 +217,20 @@ public class Main implements ApplicationListener {
     @Override
     public void dispose() {
         // Destroy application's resources here.
+        backgroundTexture.dispose();
+		dropSound.dispose();
+		music.dispose();
+		dropTexture.dispose();
+		bucketTexture.dispose();
+    }
+
+    @Override
+    public void show() {
+        music.play();
+    }
+
+    @Override
+    public void hide() {
+        // TODO Auto-generated method stub
     }
 }
