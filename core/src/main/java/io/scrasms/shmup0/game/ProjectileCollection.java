@@ -3,7 +3,7 @@ package io.scrasms.shmup0.game;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.Array;
 
-public class ProjectileCollection {
+public class ProjectileCollection implements Drawable, Updates {
     private Array<Projectile> collection;
     private Array<Projectile> removalQueue;
 
@@ -35,9 +35,9 @@ public class ProjectileCollection {
     }
 
     public void update(float deltaTime) {
-        //checkRemoval();
-        //collection.removeAll(removalQueue, false);
-        //removalQueue.clear();
+        checkRemoval();
+        collection.removeAll(removalQueue, false);
+        removalQueue.clear();
 
         for (Projectile projectile : collection) {
             projectile.update(deltaTime);

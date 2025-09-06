@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 
-public class Projectile {
+public class Projectile implements Drawable, Updates {
     private Sprite sprite;
     private Vector2 velocity;
     private float worldHeight;

@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
-public class Player {
+public class Player implements Drawable, Updates {
     private Sprite sprite;
 
     private ProjectileCollection projCol;
@@ -43,7 +43,7 @@ public class Player {
         float playerWidth = sprite.getWidth();
         float playerHeight = sprite.getHeight();
 
-        move(deltaTime);
+        move(80, deltaTime);
         shoot(deltaTime);
 
         sprite.setX(MathUtils.clamp(sprite.getX(), 0, worldWidth - playerWidth));
@@ -52,12 +52,56 @@ public class Player {
         shotTimer += deltaTime;
     }
 
-    private void move(float deltaTime) {
-        float speed = 75f;
+    private void move(float speed, float deltaTime) {
+        float x = 0;
+        float y = 0;
+        float sqrt2 = 1.4142f;
 
-        Vector2 move = dirrectionFromInput().scl(speed * deltaTime);
+        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
+            speed *= 0.66;
+        }
 
-        sprite.translate(move.x, move.y);
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+                x = sqrt2/2;
+                y = sqrt2/2;
+            }
+            else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+                x = sqrt2/2;
+                y = -sqrt2/2;
+            }
+            else {
+                x = 1;
+                y = 0;
+            }
+        }
+        else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+                x = -sqrt2/2;
+                y = sqrt2/2;
+            }
+            else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+                x = -sqrt2/2;
+                y = -sqrt2/2;
+            }
+            else {
+                x = -1;
+                y = 0;
+            }
+        }
+        else if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+            x = 0;
+            y = 1;
+        }
+        else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+            x = 0;
+            y = -1;
+        }
+
+        x *= (speed * deltaTime);
+        y *= (speed * deltaTime);
+
+        sprite.translate(x, y);
     }
     
     private void shoot(float deltaTime) {
@@ -70,45 +114,5 @@ public class Player {
             Projectile newProjectile = new Projectile(projTexture, vel, spawnPos, worldHeight, worldWidth);
             projCol.newProjectile(newProjectile);
         }
-    }
-
-    // Input slop
-    private Vector2 dirrectionFromInput() {
-        float sqrt2 = 1.4142f;
-        Vector2 unitVec;
-
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-                unitVec = new Vector2(sqrt2/2, sqrt2/2);
-            }
-            else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-                unitVec = new Vector2(sqrt2/2, -sqrt2/2);
-            }
-            else {
-                unitVec = new Vector2(1,0);
-            }
-        }
-        else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-                unitVec = new Vector2(-sqrt2/2, sqrt2/2);
-            }
-            else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-                unitVec = new Vector2(-sqrt2/2, -sqrt2/2);
-            }
-            else {
-                unitVec = new Vector2(-1,0);
-            }
-        }
-        else if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            unitVec = new Vector2(0,1);
-        }
-        else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-                unitVec = new Vector2(0,-1);
-        }
-        else {
-            unitVec = new Vector2(0,0);
-        }
-
-        return unitVec;
     }
 }
