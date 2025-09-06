@@ -43,7 +43,8 @@ public class Player {
         float playerWidth = sprite.getWidth();
         float playerHeight = sprite.getHeight();
 
-        input(deltaTime);
+        move(deltaTime);
+        shoot(deltaTime);
 
         sprite.setX(MathUtils.clamp(sprite.getX(), 0, worldWidth - playerWidth));
         sprite.setY(MathUtils.clamp(sprite.getY(), 0, worldHeight - playerHeight));
@@ -51,13 +52,15 @@ public class Player {
         shotTimer += deltaTime;
     }
 
-    private void input(float deltaTime) {
+    private void move(float deltaTime) {
         float speed = 75f;
 
         Vector2 move = dirrectionFromInput().scl(speed * deltaTime);
 
         sprite.translate(move.x, move.y);
-
+    }
+    
+    private void shoot(float deltaTime) {
         float shotDelay = 0.2f;
 
         if (Gdx.input.isKeyPressed(Input.Keys.J) && shotDelay < shotTimer) {
