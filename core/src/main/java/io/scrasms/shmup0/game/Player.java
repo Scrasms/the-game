@@ -57,7 +57,7 @@ public class Player implements Drawable, Updates {
         float y = 0;
 
         if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
-            speed *= 0.66;
+            speed *= 0.67;
         }
 
         x = 0;
