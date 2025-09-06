@@ -11,7 +11,7 @@ public class Projectile implements Drawable, Updates {
     private float worldHeight;
     private float worldWidth;
 
-    public Projectile(Texture texture, Vector2 velocity, Vector2 position, float worldHeight, float worldWidth) {
+    public Projectile(Texture texture, Vector2 velocity, Vector2 position, float worldWidth, float worldHeight) {
         sprite = new Sprite(texture);
         sprite.setSize(texture.getWidth(), texture.getHeight());
         sprite.setCenter(position.x, position.y);
@@ -29,7 +29,7 @@ public class Projectile implements Drawable, Updates {
     }
 
     public boolean isInBounds(float worldHeight, float worldWidth) {
-        boolean topCondition = (sprite.getY() < worldHeight + sprite.getHeight());
+        boolean topCondition = (sprite.getY() < worldHeight + 4* sprite.getHeight());
         boolean bottomCondition = (sprite.getY() > -sprite.getHeight());
         boolean rightCondition = (sprite.getX() < worldWidth + sprite.getWidth());
         boolean leftCondition = (sprite.getX() > -sprite.getWidth());

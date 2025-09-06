@@ -105,12 +105,12 @@ public class Player implements Drawable, Updates {
     }
     
     private void shoot(float deltaTime) {
-        float shotDelay = 0.2f;
+        float shotDelay = 0.07f;
 
         if (Gdx.input.isKeyPressed(Input.Keys.J) && shotDelay < shotTimer) {
             shotTimer = 0;
             Vector2 spawnPos = new Vector2(sprite.getX() + sprite.getWidth()/2, sprite.getY() + sprite.getHeight()*2/3);
-            Vector2 vel = new Vector2(120f, 120f);
+            Vector2 vel = new Vector2(0f, 120f);
             Projectile newProjectile = new Projectile(projTexture, vel, spawnPos, worldHeight, worldWidth);
             projCol.newProjectile(newProjectile);
         }
