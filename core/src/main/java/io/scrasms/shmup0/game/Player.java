@@ -9,16 +9,16 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 public class Player {
-    Sprite sprite;
+    private Sprite sprite;
 
-    ProjectileCollection projCol;
+    private ProjectileCollection projCol;
 
-    Texture projTexture;
+    private Texture projTexture;
 
-    float worldHeight;
-    float worldWidth;
+    private float worldHeight;
+    private float worldWidth;
 
-    float shotTimer;
+    private float shotTimer;
 
     public Player(Texture texture, Vector2 position, ProjectileCollection projCol, Texture projTexture, float worldHeight, float worldWidth) {
         sprite = new Sprite(texture);

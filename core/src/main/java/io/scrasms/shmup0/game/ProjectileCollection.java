@@ -4,8 +4,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.Array;
 
 public class ProjectileCollection {
-    Array<Projectile> collection;
-    Array<Projectile> removalQueue;
+    private Array<Projectile> collection;
+    private Array<Projectile> removalQueue;
 
     public ProjectileCollection(float worldHeight, float worldWidth) {
         collection = new Array<>();

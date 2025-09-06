@@ -8,16 +8,16 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class GameScreen implements Screen {
-    final Shmup game;
+    private final Shmup game;
 
-    float worldHeight;
-    float worldWidth;
+    private float worldHeight;
+    private float worldWidth;
 
-    Texture playerTexture;
-    Texture playerProjectileTexture;
+    private Texture playerTexture;
+    private Texture playerProjectileTexture;
 
-    Player player;
-    ProjectileCollection projCol;
+    private Player player;
+    private ProjectileCollection projCol;
 
     public GameScreen(final Shmup game) {
         this.game = game;

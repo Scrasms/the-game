@@ -6,10 +6,10 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 
 public class Projectile {
-    Sprite sprite;
-    Vector2 velocity;
-    float worldHeight;
-    float worldWidth;
+    private Sprite sprite;
+    private Vector2 velocity;
+    private float worldHeight;
+    private float worldWidth;
 
     public Projectile(Texture texture, Vector2 velocity, Vector2 position, float worldHeight, float worldWidth) {
         sprite = new Sprite(texture);
