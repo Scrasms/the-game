@@ -7,17 +7,20 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Projectile implements Drawable, Updates {
     private Sprite sprite;
-    private Vector2 velocity;
+    private Path path;
+    private float speed;
     private float worldHeight;
     private float worldWidth;
+    private float timeElapsed;
 
-    public Projectile(Texture texture, Vector2 velocity, Vector2 position, float worldWidth, float worldHeight) {
+    public Projectile(Texture texture, Path path, float speed, float worldWidth, float worldHeight) {
         sprite = new Sprite(texture);
         sprite.setSize(texture.getWidth(), texture.getHeight());
-        sprite.setCenter(position.x, position.y);
-        this.velocity = velocity;
+        this.path = path;
         this.worldHeight = worldHeight;
         this.worldWidth = worldWidth;
+
+        this.timeElapsed = 0;
     }
 
     public void draw(Batch batch){
@@ -25,7 +28,9 @@ public class Projectile implements Drawable, Updates {
     }
 
     public void update(float deltaTime) {
-        sprite.translate(deltaTime*velocity.x, deltaTime*velocity.y);
+        timeElapsed += deltaTime;
+        Vector2 pos = path.pathPos(timeElapsed, speed);
+        sprite.setCenter(pos.x, pos.y);
     }
 
     public boolean isInBounds(float worldHeight, float worldWidth) {
