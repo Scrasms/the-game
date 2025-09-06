@@ -1,0 +1,92 @@
+package io.scrasms.shmup0.game;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.ScreenUtils;
+
+public class GameScreen implements Screen {
+    final Shmup game;
+
+    float worldHeight;
+    float worldWidth;
+
+    Texture playerTexture;
+    Texture playerProjectileTexture;
+
+    Player player;
+    ProjectileCollection projCol;
+
+    public GameScreen(final Shmup game) {
+        this.game = game;
+
+        playerTexture = new Texture("PHplayer.png");
+        playerProjectileTexture = new Texture("PHprojectile.png");
+
+        worldHeight = game.viewport.getWorldHeight();
+        worldWidth = game.viewport.getWorldWidth();
+
+        projCol = new ProjectileCollection(worldHeight, worldWidth);
+
+        Vector2 startPos = new Vector2(worldWidth/2, worldHeight/6);
+        player = new Player(playerTexture, startPos, projCol, playerProjectileTexture, worldHeight, worldWidth);
+    }
+
+    @Override
+    public void show() {
+
+    }
+
+    @Override
+    public void render(float delta) {
+        logic();
+        draw();
+    }
+
+    private void logic() {
+        float deltaTime = Gdx.graphics.getDeltaTime();
+
+        projCol.update(deltaTime);
+        player.update(deltaTime);
+    }
+
+    private void draw() {
+        ScreenUtils.clear(Color.BLACK);
+        game.viewport.apply();
+        game.batch.setProjectionMatrix(game.viewport.getCamera().combined);
+        game.batch.begin();
+
+        projCol.draw(game.batch);
+        player.draw(game.batch);
+
+        game.batch.end();
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        game.viewport.update(width, height, true);
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
+    @Override
+    public void hide() {
+
+    }
+
+    @Override
+    public void dispose() {
+        playerTexture.dispose();
+    }
+    
+}
