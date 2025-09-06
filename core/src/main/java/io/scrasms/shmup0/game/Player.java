@@ -53,15 +53,12 @@ public class Player implements Drawable, Updates {
     }
 
     private void move(float speed, float deltaTime) {
-        float x = 0;
-        float y = 0;
-
         if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
             speed *= 0.67;
         }
 
-        x = 0;
-        y = 0;
+        float x = 0;
+        float y = 0;
 
         if (Gdx.input.isKeyPressed(Input.Keys.D)) x += 1;
         if (Gdx.input.isKeyPressed(Input.Keys.A)) x -= 1;
