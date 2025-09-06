@@ -48,8 +48,8 @@ public class GameScreen implements Screen {
     private void logic() {
         float deltaTime = Gdx.graphics.getDeltaTime();
 
-        projCol.update(deltaTime);
         player.update(deltaTime);
+        projCol.update(deltaTime);
     }
 
     private void draw() {
