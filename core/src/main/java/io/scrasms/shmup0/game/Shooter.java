@@ -20,9 +20,7 @@ public class Shooter implements Updates {
     public void shoot(Vector2 shooterPosition) {
         if (shotTimer > shotDelay) {
             shotTimer = 0;
-            Projectile newProjectile = projectile.cpy();
-            newProjectile.movePath(shooterPosition.add(relativePosition));
-            projCol.newProjectile(newProjectile);
+            projCol.newProjectile(projectile.spawnCopy(shooterPosition.add(relativePosition)));
         }
     }
 

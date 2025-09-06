@@ -8,15 +8,18 @@ import com.badlogic.gdx.math.Vector2;
 public class Projectile implements Drawable, Updates {
     private Sprite sprite;
     private Path path;
+    private Vector2 startPos;
     private float speed;
     private float worldHeight;
     private float worldWidth;
     private float timeElapsed;
 
-    public Projectile(Texture texture, Path path, float speed, float worldWidth, float worldHeight) {
+    public Projectile(Texture texture, Path path, Vector2 startPos, float speed, float worldWidth, float worldHeight) {
         sprite = new Sprite(texture);
         sprite.setSize(texture.getWidth(), texture.getHeight());
         this.path = path;
+        this.speed = speed;
+        this.startPos = startPos;
         this.worldHeight = worldHeight;
         this.worldWidth = worldWidth;
 
@@ -30,7 +33,7 @@ public class Projectile implements Drawable, Updates {
     public void update(float deltaTime) {
         timeElapsed += deltaTime;
         Vector2 pos = path.pathPos(timeElapsed, speed);
-        sprite.setCenter(pos.x, pos.y);
+        sprite.setCenter(pos.x + startPos.x, pos.y + startPos.y);
     }
 
     public boolean isInBounds(float worldHeight, float worldWidth) {
@@ -45,11 +48,7 @@ public class Projectile implements Drawable, Updates {
         return !isInBounds(worldWidth, worldHeight);
     }
 
-    public Projectile cpy() {
-        return new Projectile(sprite.getTexture(), path, speed, worldWidth, worldHeight);
-    }
-
-    public void movePath(Vector2 displacement) {
-        path.movePath(displacement);
+    public Projectile spawnCopy(Vector2 startPos) {
+        return new Projectile(sprite.getTexture(), path, startPos, speed, worldWidth, worldHeight);
     }
 }

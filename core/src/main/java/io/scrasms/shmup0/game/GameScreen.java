@@ -31,7 +31,7 @@ public class GameScreen implements Screen {
         projCol = new ProjectileCollection(worldHeight, worldWidth);
 
         Vector2 startPos = new Vector2(worldWidth/2, worldHeight/6);
-        player = new Player(playerTexture, startPos, projCol, playerProjectileTexture, worldHeight, worldWidth);
+        player = new Player(playerTexture, startPos, projCol, worldHeight, worldWidth);
     }
 
     @Override

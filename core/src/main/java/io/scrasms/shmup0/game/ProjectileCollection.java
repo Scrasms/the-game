@@ -16,6 +16,7 @@ public class ProjectileCollection implements Drawable, Updates {
         collection.add(projectile);
     }
 
+    @Override
     public void draw(Batch batch) {
         for (Projectile projectile : collection) {
             projectile.draw(batch);
@@ -34,6 +35,7 @@ public class ProjectileCollection implements Drawable, Updates {
         }
     }
 
+    @Override
     public void update(float deltaTime) {
         checkRemoval();
         collection.removeAll(removalQueue, false);

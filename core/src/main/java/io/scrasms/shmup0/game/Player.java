@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
+import io.scrasms.shmup0.game.paths.FunctionPath;
 import io.scrasms.shmup0.game.paths.StraightPath;
 
 public class Player implements Drawable, Updates {
@@ -32,16 +33,22 @@ public class Player implements Drawable, Updates {
         this.worldWidth = worldWidth;
 
         Texture mainFireTexture = new Texture("PHprojectile.png");
-        Path mainPath = new StraightPath(-90);
-        Projectile mainFire = new Projectile(mainFireTexture, mainPath, 80, worldWidth, worldHeight);
+        Path mainPath = new StraightPath(90);
+        Projectile mainFire = new Projectile(mainFireTexture, mainPath, new Vector2(0,0), 80, worldWidth, worldHeight);
+        mainWeapon = new Shooter(projCol, 0.07f, new Vector2(4, 6), mainFire);
 
         Texture secondaryFireTexture = new Texture("PHsecondary.png");
+        Path secondaryPath = new FunctionPath((x) -> (float)Math.sin(x/7)*10, 90);
+        Projectile secondaryFire = new Projectile(secondaryFireTexture, secondaryPath, new Vector2(0,0), 40, worldWidth, worldHeight);
+        secondaryWeapon = new Shooter(projCol, 0.3f, new Vector2(0,0), secondaryFire);
     }
 
+    @Override
     public void draw(Batch batch) {
         sprite.draw(batch);
     }
 
+    @Override
     public void update(float deltaTime) {
         float playerWidth = sprite.getWidth();
         float playerHeight = sprite.getHeight();
@@ -80,8 +87,13 @@ public class Player implements Drawable, Updates {
     }
     
     private void shoot(float deltaTime) {
+        Vector2 playerPos = new Vector2(sprite.getX(), sprite.getY());
+
         if (Gdx.input.isKeyPressed(Input.Keys.J)) {
-            
+            mainWeapon.shoot(playerPos);
+        }
+        else if (Gdx.input.isKeyPressed(Input.Keys.K)) {
+            secondaryWeapon.shoot(playerPos);
         }
     }
 }
