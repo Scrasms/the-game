@@ -26,6 +26,18 @@ public class Projectile implements Drawable, Updates {
         this.timeElapsed = 0;
     }
 
+    public Projectile(Texture texture, Path path, float speed, float worldWidth, float worldHeight) {
+        sprite = new Sprite(texture);
+        sprite.setSize(texture.getWidth(), texture.getHeight());
+        this.path = path;
+        this.speed = speed;
+        this.startPos = null;
+        this.worldHeight = worldHeight;
+        this.worldWidth = worldWidth;
+
+        this.timeElapsed = 0;
+    }
+
     public void draw(Batch batch){
         sprite.draw(batch);
     }
@@ -36,10 +48,10 @@ public class Projectile implements Drawable, Updates {
         sprite.setCenter(pos.x + startPos.x, pos.y + startPos.y);
     }
 
-    public boolean isInBounds(float worldHeight, float worldWidth) {
-        boolean topCondition = (sprite.getY() < worldHeight + 4* sprite.getHeight());
+    public boolean isInBounds(float worldWidth, float worldHeight) {
+        boolean topCondition = (sprite.getY() < worldHeight + sprite.getHeight());
         boolean bottomCondition = (sprite.getY() > -sprite.getHeight());
-        boolean rightCondition = (sprite.getX() < worldWidth + sprite.getWidth());
+        boolean rightCondition = (sprite.getX() < worldWidth);
         boolean leftCondition = (sprite.getX() > -sprite.getWidth());
         return topCondition && bottomCondition && rightCondition && leftCondition;
     }

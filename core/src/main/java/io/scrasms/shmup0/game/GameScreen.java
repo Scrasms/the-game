@@ -28,10 +28,10 @@ public class GameScreen implements Screen {
         worldHeight = game.viewport.getWorldHeight();
         worldWidth = game.viewport.getWorldWidth();
 
-        projCol = new ProjectileCollection(worldHeight, worldWidth);
+        projCol = new ProjectileCollection(worldWidth, worldHeight);
 
         Vector2 startPos = new Vector2(worldWidth/2, worldHeight/6);
-        player = new Player(playerTexture, startPos, projCol, worldHeight, worldWidth);
+        player = new Player(playerTexture, startPos, projCol, worldWidth, worldHeight);
     }
 
     @Override

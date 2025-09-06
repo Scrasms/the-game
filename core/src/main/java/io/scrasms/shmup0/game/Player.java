@@ -20,9 +20,10 @@ public class Player implements Drawable, Updates {
     private float worldWidth;
 
     private Shooter mainWeapon;
-    private Shooter secondaryWeapon;
+    private Shooter secondaryWeapon1;
+    private Shooter secondaryWeapon2;
 
-    public Player(Texture texture, Vector2 position, ProjectileCollection projCol, float worldHeight, float worldWidth) {
+    public Player(Texture texture, Vector2 position, ProjectileCollection projCol, float worldWidth, float worldHeight) {
         sprite = new Sprite(texture);
         sprite.setSize(texture.getWidth(), texture.getHeight());
         sprite.setCenter(position.x, position.y);
@@ -34,13 +35,16 @@ public class Player implements Drawable, Updates {
 
         Texture mainFireTexture = new Texture("PHprojectile.png");
         Path mainPath = new StraightPath(90);
-        Projectile mainFire = new Projectile(mainFireTexture, mainPath, new Vector2(0,0), 80, worldWidth, worldHeight);
+        Projectile mainFire = new Projectile(mainFireTexture, mainPath, 120, worldWidth, worldHeight);
         mainWeapon = new Shooter(projCol, 0.07f, new Vector2(4, 6), mainFire);
 
         Texture secondaryFireTexture = new Texture("PHsecondary.png");
-        Path secondaryPath = new FunctionPath((x) -> (float)Math.sin(x/7)*10, 90);
-        Projectile secondaryFire = new Projectile(secondaryFireTexture, secondaryPath, new Vector2(0,0), 40, worldWidth, worldHeight);
-        secondaryWeapon = new Shooter(projCol, 0.3f, new Vector2(0,0), secondaryFire);
+        Path secondaryPath1 = new FunctionPath((x) -> (float)Math.sin(x/7)*10, 90);
+        Path secondaryPath2 = new FunctionPath((x) -> -(float)Math.sin(x/7)*10, 90);
+        Projectile secondaryFire1 = new Projectile(secondaryFireTexture, secondaryPath1, 80, worldWidth, worldHeight);
+        Projectile secondaryFire2 = new Projectile(secondaryFireTexture, secondaryPath2, 80, worldWidth, worldHeight);
+        secondaryWeapon1 = new Shooter(projCol, 0.18326f, new Vector2(2,2), secondaryFire1);
+        secondaryWeapon2 = new Shooter(projCol, 0.18326f, new Vector2(2,2), secondaryFire2);
     }
 
     @Override
@@ -60,7 +64,8 @@ public class Player implements Drawable, Updates {
         sprite.setY(MathUtils.clamp(sprite.getY(), 0, worldHeight - playerHeight));
 
         mainWeapon.update(deltaTime);
-        secondaryWeapon.update(deltaTime);
+        secondaryWeapon1.update(deltaTime);
+        secondaryWeapon2.update(deltaTime);
     }
 
     private void move(float speed, float deltaTime) {
@@ -93,7 +98,8 @@ public class Player implements Drawable, Updates {
             mainWeapon.shoot(playerPos);
         }
         else if (Gdx.input.isKeyPressed(Input.Keys.K)) {
-            secondaryWeapon.shoot(playerPos);
+            secondaryWeapon1.shoot(playerPos);
+            secondaryWeapon2.shoot(playerPos);
         }
     }
 }
