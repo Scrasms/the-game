@@ -1,18 +1,27 @@
 package io.scrasms.shmup0.game;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 
 public class Shooter implements Updates {
     private ProjectileCollection projCol;
+    private Projectile projectile;
+    private Vector2 relativePosition;
     private float shotDelay;
     private float shotTimer;
 
-    public void shoot() {
+    // Relative position is the position on the shooting entity where the projectile is to be emitted from.
+    public Shooter(ProjectileCollection projCol, float shotDelay, Vector2 relativePosition, Projectile templateProjectile) {
+        this.projCol = projCol;
+        this.shotDelay = shotDelay;
+        this.projectile = templateProjectile;
+        this.relativePosition = relativePosition;
+    }
+
+    public void shoot(Vector2 shooterPosition) {
         if (shotTimer > shotDelay) {
             shotTimer = 0;
-            Projectile newProjectile = new Projectile(projTexture, path, speed, worldHeight, worldWidth);
+            Projectile newProjectile = projectile.cpy();
+            newProjectile.movePath(shooterPosition.add(relativePosition));
             projCol.newProjectile(newProjectile);
         }
     }

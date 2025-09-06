@@ -44,4 +44,12 @@ public class Projectile implements Drawable, Updates {
     public boolean checkRemoval() {
         return !isInBounds(worldWidth, worldHeight);
     }
+
+    public Projectile cpy() {
+        return new Projectile(sprite.getTexture(), path, speed, worldWidth, worldHeight);
+    }
+
+    public void movePath(Vector2 displacement) {
+        path.movePath(displacement);
+    }
 }

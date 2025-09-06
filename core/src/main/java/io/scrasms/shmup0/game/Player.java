@@ -8,31 +8,34 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
+import io.scrasms.shmup0.game.paths.StraightPath;
+
 public class Player implements Drawable, Updates {
     private Sprite sprite;
 
     private ProjectileCollection projCol;
 
-    private Texture projTexture;
-
     private float worldHeight;
     private float worldWidth;
 
-    private float shotTimer;
+    private Shooter mainWeapon;
+    private Shooter secondaryWeapon;
 
-    public Player(Texture texture, Vector2 position, ProjectileCollection projCol, Texture projTexture, float worldHeight, float worldWidth) {
+    public Player(Texture texture, Vector2 position, ProjectileCollection projCol, float worldHeight, float worldWidth) {
         sprite = new Sprite(texture);
         sprite.setSize(texture.getWidth(), texture.getHeight());
         sprite.setCenter(position.x, position.y);
 
         this.projCol = projCol;
 
-        this.projTexture = projTexture;
-
         this.worldHeight = worldHeight;
         this.worldWidth = worldWidth;
 
-        shotTimer = 0f;
+        Texture mainFireTexture = new Texture("PHprojectile.png");
+        Path mainPath = new StraightPath(-90);
+        Projectile mainFire = new Projectile(mainFireTexture, mainPath, 80, worldWidth, worldHeight);
+
+        Texture secondaryFireTexture = new Texture("PHsecondary.png");
     }
 
     public void draw(Batch batch) {
@@ -49,7 +52,8 @@ public class Player implements Drawable, Updates {
         sprite.setX(MathUtils.clamp(sprite.getX(), 0, worldWidth - playerWidth));
         sprite.setY(MathUtils.clamp(sprite.getY(), 0, worldHeight - playerHeight));
 
-        shotTimer += deltaTime;
+        mainWeapon.update(deltaTime);
+        secondaryWeapon.update(deltaTime);
     }
 
     private void move(float speed, float deltaTime) {
@@ -76,14 +80,8 @@ public class Player implements Drawable, Updates {
     }
     
     private void shoot(float deltaTime) {
-        float shotDelay = 0.07f;
-
-        if (Gdx.input.isKeyPressed(Input.Keys.J) && shotDelay < shotTimer) {
-            shotTimer = 0;
-            Vector2 spawnPos = new Vector2(sprite.getX() + sprite.getWidth()/2, sprite.getY() + sprite.getHeight()*2/3);
-            Vector2 vel = new Vector2(0f, 120f);
-            Projectile newProjectile = new Projectile(projTexture, vel, spawnPos, worldHeight, worldWidth);
-            projCol.newProjectile(newProjectile);
+        if (Gdx.input.isKeyPressed(Input.Keys.J)) {
+            
         }
     }
 }
