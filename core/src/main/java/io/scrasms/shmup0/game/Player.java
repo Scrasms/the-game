@@ -55,51 +55,25 @@ public class Player implements Drawable, Updates {
     private void move(float speed, float deltaTime) {
         float x = 0;
         float y = 0;
-        float sqrt2 = 1.4142f;
 
         if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
             speed *= 0.66;
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-                x = sqrt2/2;
-                y = sqrt2/2;
-            }
-            else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-                x = sqrt2/2;
-                y = -sqrt2/2;
-            }
-            else {
-                x = 1;
-                y = 0;
-            }
-        }
-        else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-                x = -sqrt2/2;
-                y = sqrt2/2;
-            }
-            else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-                x = -sqrt2/2;
-                y = -sqrt2/2;
-            }
-            else {
-                x = -1;
-                y = 0;
-            }
-        }
-        else if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            x = 0;
-            y = 1;
-        }
-        else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            x = 0;
-            y = -1;
-        }
+        x = 0;
+        y = 0;
 
-        x *= (speed * deltaTime);
-        y *= (speed * deltaTime);
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) x += 1;
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) x -= 1;
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) y += 1;
+        if (Gdx.input.isKeyPressed(Input.Keys.S)) y -= 1;
+
+        float normFactor = 1;
+
+        if (x != 0 && y != 0) normFactor = 0.7071f; //sqrt(2)/2
+
+        x *= (speed * deltaTime * normFactor);
+        y *= (speed * deltaTime * normFactor);
 
         sprite.translate(x, y);
     }
