@@ -7,9 +7,10 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 
 import io.scrasms.shmup0.game.paths.FunctionPath;
-import io.scrasms.shmup0.game.paths.StraightPath;
+import io.scrasms.shmup0.game.paths.NodePath;
 
 public class Player implements Drawable, Updates {
     private Sprite sprite;
@@ -34,9 +35,15 @@ public class Player implements Drawable, Updates {
         this.worldWidth = worldWidth;
 
         Texture mainFireTexture = new Texture("PHprojectile.png");
-        Path mainPath = new StraightPath(90);
-        Projectile mainFire = new Projectile(mainFireTexture, mainPath, 120, worldWidth, worldHeight);
-        mainWeapon = new Shooter(projCol, 0.07f, new Vector2(4, 6), mainFire);
+        //Path mainPath = new StraightPath(90);
+        Array<Vector2Pair> pathPairs = new Array<>();
+        pathPairs.add(new Vector2Pair(new Vector2(0,0), new Vector2(20, 23)));
+        pathPairs.add(new Vector2Pair(new Vector2(20,7), new Vector2(0, 30)));
+        pathPairs.add(new Vector2Pair(new Vector2(0,20), new Vector2(20, 40)));
+
+        Path mainPath = new NodePath(pathPairs);
+        Projectile mainFire = new Projectile(mainFireTexture, mainPath, 60, worldWidth, worldHeight);
+        mainWeapon = new Shooter(projCol, 0.4f, new Vector2(4, 6), mainFire);
 
         Texture secondaryFireTexture = new Texture("PHsecondary.png");
         Path secondaryPath1 = new FunctionPath((x) -> (float)Math.sin(x/7)*10, 90);
