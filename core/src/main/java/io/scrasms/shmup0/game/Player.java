@@ -12,7 +12,7 @@ import com.badlogic.gdx.utils.Array;
 import io.scrasms.shmup0.game.paths.FunctionPath;
 import io.scrasms.shmup0.game.paths.NodePath;
 
-public class Player implements Drawable, Updates {
+public class Player implements Drawable, Updates, LivePosition {
     private Sprite sprite;
 
     private ProjectileCollection projCol;
@@ -24,10 +24,14 @@ public class Player implements Drawable, Updates {
     private Shooter secondaryWeapon1;
     private Shooter secondaryWeapon2;
 
+    private Vector2 livePosition;
+
     public Player(Texture texture, Vector2 position, ProjectileCollection projCol, float worldWidth, float worldHeight) {
         sprite = new Sprite(texture);
         sprite.setSize(texture.getWidth(), texture.getHeight());
         sprite.setCenter(position.x, position.y);
+
+        livePosition = new Vector2();
 
         this.projCol = projCol;
 
@@ -108,5 +112,16 @@ public class Player implements Drawable, Updates {
             secondaryWeapon1.shoot(playerPos);
             secondaryWeapon2.shoot(playerPos);
         }
+    }
+
+    @Override
+    public Vector2 getLivePosition() {
+        return livePosition;
+    }
+
+    @Override
+    public void updateLivePosition() {
+        livePosition.x = sprite.getX() + sprite.getWidth()/2;
+        livePosition.y = sprite.getY() + sprite.getHeight()/2;
     }
 }
