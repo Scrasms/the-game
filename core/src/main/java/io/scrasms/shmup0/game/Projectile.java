@@ -44,7 +44,7 @@ public class Projectile implements Drawable, Updates {
 
     public void update(float deltaTime) {
         timeElapsed += deltaTime;
-        Vector2 pos = path.pathPos(timeElapsed, speed);
+        Vector2 pos = path.pathPos(timeElapsed * speed);
         sprite.setCenter(pos.x + startPos.x, pos.y + startPos.y);
     }
 

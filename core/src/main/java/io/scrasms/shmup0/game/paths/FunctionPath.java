@@ -16,8 +16,8 @@ public class FunctionPath implements Path {
     }
 
     @Override
-    public Vector2 pathPos(float time, float speed) {
-        Vector2 functionVector = new Vector2(time * speed, func.apply(time * speed));
+    public Vector2 pathPos(float distance) {
+        Vector2 functionVector = new Vector2(distance, func.apply(distance));
         return functionVector.rotateDeg(angle);
     }    
 }

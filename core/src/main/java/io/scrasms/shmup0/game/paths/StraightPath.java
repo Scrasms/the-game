@@ -12,8 +12,8 @@ public class StraightPath implements Path {
     }
 
     @Override
-    public Vector2 pathPos(float time, float speed) {
-        Vector2 functionVector = new Vector2(time * speed, 0);
+    public Vector2 pathPos(float distance) {
+        Vector2 functionVector = new Vector2(distance, 0);
         return new Vector2(functionVector.setAngleDeg(angle));
     }    
 }
