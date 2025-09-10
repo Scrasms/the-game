@@ -1,6 +1,7 @@
 package io.scrasms.shmup0.game;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 
 public class ProjectileCollection implements Drawable, Updates {
@@ -33,6 +34,14 @@ public class ProjectileCollection implements Drawable, Updates {
                 queueRemoval(projectile);
             }
         }
+    }
+
+    public float checkCollisions(Rectangle hitbox) {
+        float damageTotal = 0;
+        for (Projectile projectile : collection) {
+            if (projectile.checkCollision(hitbox)) damageTotal += projectile.getDamage();
+        }
+        return damageTotal;
     }
 
     @Override

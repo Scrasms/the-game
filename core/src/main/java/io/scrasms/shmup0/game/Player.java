@@ -7,10 +7,9 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
 
 import io.scrasms.shmup0.game.paths.FunctionPath;
-import io.scrasms.shmup0.game.paths.NodePath;
+import io.scrasms.shmup0.game.paths.StraightPath;
 
 public class Player implements Drawable, Updates, LivePosition {
     private Sprite sprite;
@@ -39,21 +38,15 @@ public class Player implements Drawable, Updates, LivePosition {
         this.worldWidth = worldWidth;
 
         Texture mainFireTexture = new Texture("PHprojectile.png");
-        //Path mainPath = new StraightPath(90);
-        Array<Vector2Pair> pathPairs = new Array<>();
-        pathPairs.add(new Vector2Pair(new Vector2(0,0), new Vector2(20, 23)));
-        pathPairs.add(new Vector2Pair(new Vector2(20,7), new Vector2(0, 30)));
-        pathPairs.add(new Vector2Pair(new Vector2(0,20), new Vector2(20, 40)));
-
-        Path mainPath = new NodePath(pathPairs);
-        Projectile mainFire = new Projectile(mainFireTexture, mainPath, 60, worldWidth, worldHeight);
-        mainWeapon = new Shooter(projCol, 0.4f, new Vector2(4, 6), mainFire);
+        Path mainPath = new StraightPath(90);
+        Projectile mainFire = new Projectile(mainFireTexture, mainPath, 130, worldWidth, worldHeight, 2);
+        mainWeapon = new Shooter(projCol, 0.04f, new Vector2(4, 6), mainFire);
 
         Texture secondaryFireTexture = new Texture("PHsecondary.png");
         Path secondaryPath1 = new FunctionPath((x) -> (float)Math.sin(x/7)*10, 90);
         Path secondaryPath2 = new FunctionPath((x) -> -(float)Math.sin(x/7)*10, 90);
-        Projectile secondaryFire1 = new Projectile(secondaryFireTexture, secondaryPath1, 80, worldWidth, worldHeight);
-        Projectile secondaryFire2 = new Projectile(secondaryFireTexture, secondaryPath2, 80, worldWidth, worldHeight);
+        Projectile secondaryFire1 = new Projectile(secondaryFireTexture, secondaryPath1, 80, worldWidth, worldHeight, 5);
+        Projectile secondaryFire2 = new Projectile(secondaryFireTexture, secondaryPath2, 80, worldWidth, worldHeight, 5);
         secondaryWeapon1 = new Shooter(projCol, 0.18326f, new Vector2(2,2), secondaryFire1);
         secondaryWeapon2 = new Shooter(projCol, 0.18326f, new Vector2(2,2), secondaryFire2);
     }

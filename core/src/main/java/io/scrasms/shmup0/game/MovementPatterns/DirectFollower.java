@@ -16,7 +16,6 @@ public class DirectFollower implements FollowerMovementPattern {
         accel = 0;
     }
 
-
     @Override
     public Vector2 getNextPosition() {
         return new Vector2(liveTarget).sub(livePos).nor().scl(speed * deltaTime);
@@ -43,4 +42,7 @@ public class DirectFollower implements FollowerMovementPattern {
         liveTarget = livePosition;
     }
     
+    public MovementPattern copy() {
+        return new DirectFollower(liveTarget, livePos);
+    }
 }

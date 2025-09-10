@@ -3,6 +3,7 @@ package io.scrasms.shmup0.game;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public class Projectile implements Drawable, Updates {
@@ -13,8 +14,10 @@ public class Projectile implements Drawable, Updates {
     private float worldHeight;
     private float worldWidth;
     private float timeElapsed;
+    private float damage;
+    private boolean collided;
 
-    public Projectile(Texture texture, Path path, Vector2 startPos, float speed, float worldWidth, float worldHeight) {
+    public Projectile(Texture texture, Path path, Vector2 startPos, float speed, float worldWidth, float worldHeight, float damage) {
         sprite = new Sprite(texture);
         sprite.setSize(texture.getWidth(), texture.getHeight());
         this.path = path;
@@ -22,11 +25,13 @@ public class Projectile implements Drawable, Updates {
         this.startPos = startPos;
         this.worldHeight = worldHeight;
         this.worldWidth = worldWidth;
+        this.damage = damage;
 
-        this.timeElapsed = 0;
+        timeElapsed = 0;
+        collided = false;
     }
 
-    public Projectile(Texture texture, Path path, float speed, float worldWidth, float worldHeight) {
+    public Projectile(Texture texture, Path path, float speed, float worldWidth, float worldHeight, float damage) {
         sprite = new Sprite(texture);
         sprite.setSize(texture.getWidth(), texture.getHeight());
         this.path = path;
@@ -34,6 +39,7 @@ public class Projectile implements Drawable, Updates {
         this.startPos = null;
         this.worldHeight = worldHeight;
         this.worldWidth = worldWidth;
+        this.damage = damage;
 
         this.timeElapsed = 0;
     }
@@ -56,11 +62,23 @@ public class Projectile implements Drawable, Updates {
         return topCondition && bottomCondition && rightCondition && leftCondition;
     }
 
+    public boolean checkCollision(Rectangle hitbox) {
+        if (hitbox.overlaps(sprite.getBoundingRectangle()) && collided == false) {
+            collided = true;
+            return true;
+        }
+        return false;
+    }
+
+    public float getDamage() {
+        return damage;
+    }
+
     public boolean checkRemoval() {
-        return !isInBounds(worldWidth, worldHeight);
+        return !isInBounds(worldWidth, worldHeight) || collided;
     }
 
     public Projectile spawnCopy(Vector2 startPos) {
-        return new Projectile(sprite.getTexture(), path, startPos, speed, worldWidth, worldHeight);
+        return new Projectile(sprite.getTexture(), path, startPos, speed, worldWidth, worldHeight, damage);
     }
 }
